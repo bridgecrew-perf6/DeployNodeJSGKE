@@ -28,6 +28,13 @@ spec:
 cat KEY-FILE | docker login -u KEY-TYPE --password-stdin \
 https://LOCATION-docker.pkg.dev
 ```
+### Get Endpoint Address for Jenkins
+```bash
+kubectl describe service cd-jenkins  | grep Endpoint 
+```
+#### Update endpoint address in Kubernetes Cloud on Jenkins
+
+
 
 ### Build Docker Image
 
