@@ -49,18 +49,9 @@ stage('Git Fetch'){
             }
         
 
-         stage('Deploy'){
-            steps{
-                container(name: 'jenkinspod', shell: '/bin/bash') {
-                sh '''
-            ls
-            helm install myfirsthelmapp mychart/ 
-          '''
-        }
-            }
-        }
+       
 
-        stage('Deploy'){
+        stage('Build'){
             steps{
                 container(name: 'kaniko', shell: '/busybox/sh') {
                 sh '''#!/busybox/sh
@@ -68,6 +59,17 @@ stage('Git Fetch'){
             cd app
             ls
             /kaniko/executor --context `pwd` --destination asia-south1-docker.pkg.dev/model-axe-117106/my-repository/nodeimage:$BUILD_NUMBER
+          '''
+        }
+            }
+        }
+
+          stage('Deploy'){
+            steps{
+                container(name: 'jenkinspod', shell: '/bin/bash') {
+                sh '''
+            ls
+            helm install myfirsthelmapp mychart/ 
           '''
         }
             }
