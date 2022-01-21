@@ -8,7 +8,7 @@ pipeline {
         name: kaniko
         spec:
         containers:
-            - name: kaniko
+          - name: kaniko
             image: gcr.io/kaniko-project/executor:debug
             command:
                 - sleep
@@ -27,7 +27,7 @@ pipeline {
                 secret:
                 secretName: kaniko-secret
             
-            - name: jenkinspod
+          - name: jenkinspod
             image: asia-south1-docker.pkg.dev/model-axe-117106/my-repository/jenkinspod:1.0
             command:
                 - sleep
