@@ -16,14 +16,14 @@ pipeline {
                 - 9999999
             volumeMounts:
                 - name: kaniko-secret
-                mountPath: /secret
+                  mountPath: /secret
             env:
                 - name: GOOGLE_APPLICATION_CREDENTIALS
-                value: /secret/cred.json
+                  value: /secret/cred.json
 
             restartPolicy: Never
             volumes:
-            - name: kaniko-secret
+              - name: kaniko-secret
                 secret:
                 secretName: kaniko-secret
             
