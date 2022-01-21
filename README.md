@@ -62,4 +62,9 @@ Example:
 Docker tag  LOCALIMAGENAME asia-south1-docker.pkg.dev/model-axe-117106/my-repository/NODEIM:1.0 .
 
 
+gcloud projects add-iam-policy-binding model-axe-117106 \
+--member=terra-dev@model-axe-117106.iam.gserviceaccount.com \
+--role=roles/artifactregistry.reader
+
+
 
