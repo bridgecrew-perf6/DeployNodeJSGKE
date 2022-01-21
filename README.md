@@ -50,6 +50,43 @@ kubectl annotate serviceaccount KSA_NAME \
     iam.gke.io/gcp-service-account=GSA_NAME@PROJECT_ID.iam.gserviceaccount.com
 ```
 
+### Create Secret for Kaniko
+```bash
+kubectl create secret generic kaniko-secret -n default --from-file=cred.json 
+```
+
+### Create a service account & create role binding
+```bash
+kubectl create serviceaccount jenkins-sa -n jenkins
+```
+
+```bash
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+ name: jenkins-agent
+ namespace: jenkins
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["*"]
+
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+ name: jenkins-agent
+ namespace: jenkins
+roleRef:
+ apiGroup: rbac.authorization.k8s.io
+ kind: Role
+ name: jenkins-agent
+subjects:
+  - kind: ServiceAccount
+    name: jenkins-sa
+```
 ### Build Docker Image
 
 Build Image Locally
@@ -68,13 +105,7 @@ gcloud projects add-iam-policy-binding model-axe-117106 \
 
 
 
-model-axe-117106
-
-gcloud iam service-accounts add-iam-policy-binding terra-dev@model-axe-117106.iam.gserviceaccount.com     --role roles/iam.workloadIdentityUser --member "serviceAccount:model-axe-117106.svc.id.goog[jenkins/jenkins-sa"]
 
 
-kubectl annotate serviceaccount jenkins-sa \
-    --namespace jenkins \
-    iam.gke.io/gcp-service-account=terra-dev@model-axe-117106.iam.gserviceaccount.com
 
 
