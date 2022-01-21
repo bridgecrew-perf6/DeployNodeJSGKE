@@ -5,33 +5,37 @@ pipeline {
         apiVersion: v1
         kind: Pod
         metadata:
-          name: kaniko
+        name: kaniko
         spec:
-          containers:
-          - name: kaniko
+        containers:
+            - name: kaniko
             image: gcr.io/kaniko-project/executor:debug
             command:
                 - sleep
             args:
                 - 9999999
             volumeMounts:
-            - name: kaniko-secret
-              mountPath: /secret
+                - name: kaniko-secret
+                mountPath: /secret
             env:
-            - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /secret/cred.json
-           - name: jenkinspod
-             image: asia-south1-docker.pkg.dev/model-axe-117106/my-repository/jenkinspod:1.0
-             command:
+                - name: GOOGLE_APPLICATION_CREDENTIALS
+                value: /secret/cred.json
+
+            restartPolicy: Never
+            volumes:
+            - name: kaniko-secret
+                secret:
+                secretName: kaniko-secret
+            
+            - name: jenkinspod
+            image: asia-south1-docker.pkg.dev/model-axe-117106/my-repository/jenkinspod:1.0
+            command:
                 - sleep
-             args:
+            args:
                 - 9999999
-              
-          restartPolicy: Never
-          volumes:
-          - name: kaniko-secret
-            secret:
-              secretName: kaniko-secret
+        
+
+
           
         '''
     }
@@ -45,7 +49,18 @@ stage('Git Fetch'){
             }
         
 
-         stage('Docker Build & Push'){
+         stage('Deploy'){
+            steps{
+                container(name: 'jenkinspod', shell: '/bin/bash') {
+                sh '''
+            ls
+            helm install myfirsthelmapp mychart/ 
+          '''
+        }
+            }
+        }
+
+        stage('Deploy'){
             steps{
                 container(name: 'kaniko', shell: '/busybox/sh') {
                 sh '''#!/busybox/sh
