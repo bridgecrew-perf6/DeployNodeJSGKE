@@ -68,3 +68,13 @@ gcloud projects add-iam-policy-binding model-axe-117106 \
 
 
 
+model-axe-117106
+
+gcloud iam service-accounts add-iam-policy-binding terra-dev@model-axe-117106.iam.gserviceaccount.com     --role roles/iam.workloadIdentityUser --member "serviceAccount:model-axe-117106.svc.id.goog[jenkins/jenkins-sa"]
+
+
+kubectl annotate serviceaccount jenkins-sa \
+    --namespace jenkins \
+    iam.gke.io/gcp-service-account=terra-dev@model-axe-117106.iam.gserviceaccount.com
+
+

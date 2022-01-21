@@ -2,39 +2,38 @@ pipeline {
      agent {
     kubernetes {
       yaml '''
-        apiVersion: v1
-        kind: Pod
-        spec:
-        containers:
-          - name: kaniko
-            image: gcr.io/kaniko-project/executor:debug
-            command:
-                - sleep
-            args:
-                - 9999999
-            volumeMounts:
-                - name: kaniko-secret
-                  mountPath: /secret
-            env:
-                - name: GOOGLE_APPLICATION_CREDENTIALS
-                  value: /secret/cred.json
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: jenkins
+  name: 'jenkinspod'
 
-            restartPolicy: Never
-            volumes:
-              - name: kaniko-secret
-                secret:
-                secretName: kaniko-secret
-            
-          - name: jenkinspod
-            image: asia-south1-docker.pkg.dev/model-axe-117106/my-repository/jenkinspod:1.0
-            command:
-                - sleep
-            args:
-                - 9999999
-        
-
-
-          
+spec:
+  serviceAccountName: jenkins-sa
+  volumes:
+      - name: kaniko-secret
+        secret:
+         secretName: kaniko-secret
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
+    command:
+        - sleep
+    args:
+        - '9999999'
+    volumeMounts:
+        - name: kaniko-secret
+          mountPath: /secret
+    env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /secret/cred.json
+    
+  - name: jenkinspod
+    image: asia-south1-docker.pkg.dev/model-axe-117106/my-repository/jenkinspod:1.0
+    command:
+        - sleep
+    args:
+        - '9999999'
         '''
     }
   }
