@@ -72,6 +72,31 @@ stage('Git Fetch'){
             }
         }
 
+         stage('Deploy in PRE-PROD'){
+            steps{
+                container(name: 'jenkinspod', shell: '/bin/bash') {
+                sh '''
+            ls
+            helm install myfirsthelmapp mychart/ 
+          '''
+        }
+            }
+        }
+
+        stage('Deploy to GKE PROD') {
+            withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
+                container(name: 'jenkinspod', shell: '/bin/bash')
+
+  // change context with related namespace
+  sh """
+  export KUBECONFIG=\${KUBECONFIG}
+  helm install myfirsthelmapp mychart/
+
+    """
+  
+}
+        }
+
       
 }
 
