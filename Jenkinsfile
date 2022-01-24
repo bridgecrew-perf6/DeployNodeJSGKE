@@ -61,23 +61,14 @@ stage('Git Fetch'){
             }
         }
 
-          stage('Deploy'){
-            steps{
-                container(name: 'jenkinspod', shell: '/bin/bash') {
-                sh '''
-            ls
-            helm install myfirsthelmapp mychart/ 
-          '''
-        }
-            }
-        }
+         
 
          stage('Deploy in PRE-PROD'){
             steps{
                 container(name: 'jenkinspod', shell: '/bin/bash') {
                 sh '''
             ls
-            helm install myfirsthelmapp mychart/ 
+            helm install myfirsthelmapppp mychart/ 
           '''
         }
             }
