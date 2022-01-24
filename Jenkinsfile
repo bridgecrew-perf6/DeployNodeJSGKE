@@ -84,16 +84,19 @@ stage('Git Fetch'){
         }
 
         stage('Deploy to GKE PROD') {
-            withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
-                container(name: 'jenkinspod', shell: '/bin/bash') {
+            steps {
+                           withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
+                            container(name: 'jenkinspod', shell: '/bin/bash') {
                      // change context with related namespace
                         sh """
                         export KUBECONFIG=\${KUBECONFIG}
                         helm install myfirsthelmapp mychart/
 
                             """
+                    }
                 }
-}
+            }
+ 
         }
 
       
