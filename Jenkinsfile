@@ -29,7 +29,7 @@ spec:
           value: /secret/cred.json
     
   - name: jenkinspod
-    image: asia-south1-docker.pkg.dev/model-axe-117106/my-repository/jenkinspod:1.0
+    image: asia-south1-docker.pkg.dev/model-axe-117106/my-repository/jenkinspod:1.3
     command:
         - sleep
     args:
