@@ -68,7 +68,7 @@ stage('Git Fetch'){
                 container(name: 'jenkinspod', shell: '/bin/bash') {
                 sh '''
             ls
-            helm install -n default myfirsthelmapppp mychart/ 
+            helm install myfirsthelmapppp mychart/ 
           '''
         }
             }
