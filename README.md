@@ -104,6 +104,41 @@ gcloud projects add-iam-policy-binding model-axe-117106 \
 --role=roles/artifactregistry.reader
 
 
+## Deploying App onto Multiple Clusters
+
+### We need kubeconfig file so that our agents can comminicate to diff clusters
+
+Kuberconfig file is situated on /home/.kube/config
+We need to delete existing kubeconfig and then autheticate to the cluster to generate the new kubeconfig file.
+Then we need to upload the kubeconfig file as secret text on jenkins
+
+Our Jenkins Slave agent must have Gcloud installed
+
+```bash
+ENV CLOUDSDK_INSTALL_DIR /usr/lib
+RUN curl -sSL https://sdk.cloud.google.com | bash
+```
+
+Our Pipeline config would be like this below
+
+```bash
+ stage('Deploy to GKE PROD') {
+            steps {
+                           withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
+                            container(name: 'jenkinspod', shell: '/bin/bash') {
+                     // change context with related namespace
+                        sh """
+                        export KUBECONFIG=\${KUBECONFIG}
+                        helm install -n default myfirsthelmapp mychart/
+
+                            """
+                    }
+                }
+            }
+ 
+        }
+```
+
 
 
 

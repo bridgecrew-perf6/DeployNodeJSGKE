@@ -68,7 +68,7 @@ stage('Git Fetch'){
                 container(name: 'jenkinspod', shell: '/bin/bash') {
                 sh '''
             ls
-            helm install myfirsthelmapppp mychart/ 
+            helm install -n default myfirsthelmapppp mychart/ 
           '''
         }
             }
@@ -81,7 +81,7 @@ stage('Git Fetch'){
                      // change context with related namespace
                         sh """
                         export KUBECONFIG=\${KUBECONFIG}
-                        helm install myfirsthelmapp mychart/
+                        helm install -n default myfirsthelmapp mychart/ 
 
                             """
                     }
